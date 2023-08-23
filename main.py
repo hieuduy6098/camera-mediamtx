@@ -5,6 +5,7 @@ import threading
 from config import *
 from yml_process import *
 from video_process import capture, record
+from api import update_capture, update_record
 
 def main():
     # tao pool luu cac message 
@@ -24,16 +25,16 @@ def main():
                 message = messages_pool.pop(0)
                 # xu ly goi tin
                 type_message = message['type']
-                # id = message['data']["id"]
+                id = message['data']["id"]
                 station_camera_id = message['data']["station_camera_id"]
                 time = message['data']["time"]
                 if type_message == 3:
-                    capture = threading.Thread(target=capture_process, args=(station_camera_id,time,))
+                    capture = threading.Thread(target=capture_process, args=(id, station_camera_id,time,))
                     capture.start()
                     capture.join()
                     print("capture xong")
                 if type_message == 4:
-                    record = threading.Thread(target=record_process, args=(station_camera_id,time,))
+                    record = threading.Thread(target=record_process, args=(id, station_camera_id,time,))
                     record.start()
                     record.join()
                     print("record xong")
@@ -103,12 +104,14 @@ def listen_message(socket, messages_pool):
     socket.close()
 
 # xu ly record
-def capture_process(station_camera_id, time):
-    status = capture(station_camera_id, time)
+def capture_process(id, station_camera_id, time):
+    status, path = capture(station_camera_id, time)
+    update_capture(id,path,status)
 
 # xu ly capture
-def record_process(station_camera_id, time):
-    status = record(station_camera_id, time)
+def record_process(id, station_camera_id, time):
+    status, path = record(station_camera_id, time)
+    update_record(id,path,status)
 
 # convert message tu byte -> dict
 def convert_message(byte_message):

@@ -21,11 +21,11 @@ def capture(id, string_time):
         # kiểm tra xem đường đãn tồn tại ko, nếu không có -> 2
         if os.path.exists(input_video) == False:
             print(f"đường dẫn {input_video} không tồn tại")
-            return 2
+            return 2, None
         # lấy tất cả các file video trong đường đẫn, nếu ko có gì -> 3
         files = os.listdir(input_video)
         if len(files) == 0:
-            return 3
+            return 3, None
         # kiểm tra video cuối cùng có thời gian lớn hơn thời gian chụp không, nếu ko -> sleep đợi video mới
         files.sort(reverse=True)
         if int(files[0][0:14]) < int(string_time):
@@ -55,12 +55,13 @@ def capture(id, string_time):
         if os.path.exists(capture_path+id) == False:
             os.makedirs(capture_path+id)
         # Lưu frame dưới dạng JPG
-        cv2.imwrite(capture_path+id+ f"/{string_time}.jpg", frame)
+        file = capture_path+id+ f"/{string_time}.jpg"
+        cv2.imwrite(file, frame)
         cap.release()
-        return 1
+        return 1, file
     except:
         print(f"lỗi xử lý capture")
-        return 0
+        return 0, None
 
 # quay video
 def record(id, string_time):
@@ -70,7 +71,7 @@ def record(id, string_time):
         # kiểm tra xem đường đãn tồn tại ko, nếu không có -> 2
         if os.path.exists(input_video) == False:
             print(f"duong dan {input_video} khong ton tai")
-            return 2
+            return 2, None
         
         # kiểm tra dường dẫn video output tồn tại chưa, nếu chưa -> tạo
         if os.path.exists(record_path + id) == False:
@@ -79,7 +80,7 @@ def record(id, string_time):
         # lấy tất cả các file video trong đường đẫn, nếu ko có gì -> 3
         files = os.listdir(input_video)
         if len(files) == 0:
-            return 3
+            return 3, None
         
         # kiểm tra video cuối cùng có thời gian lớn hơn thời gian chụp không, nếu ko -> sleep đợi video mới
         files.sort(reverse=True)
@@ -102,8 +103,10 @@ def record(id, string_time):
 
         # nếu giống nhau -> move file sang output không cần xử lý
         if file_before == file_after:
-            os.rename(input_video+f"/{file_before}", record_path+id+f"/{file_before}")
-            return 1
+            from_file = input_video+f"/{file_before}"
+            file = record_path+id+f"/{file_before}"
+            os.rename(from_file, file)
+            return 1, file
         # đọc video
         cap1 = cv2.VideoCapture(source_path+id + "/" + file_before)
         cap2 = cv2.VideoCapture(source_path+id + "/" + file_after)
@@ -147,10 +150,10 @@ def record(id, string_time):
         cap2.release()
         writer.release()
 
-        return 1
+        return 1, video
     except:
         print(f"lỗi xử lý quay video")
-        return 0
+        return 0, None
     
 # record("cam1","20230816114858")
 # capture("cam1","20230816115105")
