@@ -18,41 +18,51 @@ def getToken():
 
 
 def update_capture(id, path, status):
-    # lấy token
-    accessToken = getToken()
-    # get url
-    authorization = f"Bearer {accessToken}"
-    # tao request body 
-    body = {
-        "id": id,
-        "path": path,
-        "status": status
-    }
-    requestUrl = "http://192.168.91.132:9000/api/cameras/camera-captures/response"
-    response = requests.put(requestUrl, json=body, headers={'Authorization': authorization})
+    try:
+        # lấy token
+        accessToken = getToken()
+        if accessToken is None:
+            return
+        # get url
+        authorization = f"Bearer {accessToken}"
+        # tao request body 
+        body = {
+            "id": id,
+            "path": path,
+            "status": status
+        }
+        requestUrl = "http://192.168.91.132:9000/api/cameras/camera-captures/response"
+        response = requests.put(requestUrl, json=body, headers={'Authorization': authorization})
 
-    # Check the status code
-    if response.status_code == 200:
-        print("cap nhat capture thanh cong")
-    else:
-        print("cap nhat capture that bai")
+        # Check the status code
+        if response.status_code == 200:
+            print("cap nhat capture thanh cong")
+        else:
+            print("cap nhat capture that bai")
+    except:
+        print("loi cap nhat capture")
 
 def update_record(id, path, status):
-    # lấy token
-    accessToken = getToken()
-    # get url
-    authorization = f"Bearer {accessToken}"
-    # tao request body 
-    body = {
-        "id": id,
-        "path": path,
-        "status": status
-    }
-    requestUrl = "http://192.168.91.132:9000/api/cameras/camera-records/response"
-    response = requests.put(requestUrl, json=body, headers={'Authorization': authorization})
+    try:
+        # lấy token
+        accessToken = getToken()
+        if accessToken is None:
+            return
+        # get url
+        authorization = f"Bearer {accessToken}"
+        # tao request body 
+        body = {
+            "id": id,
+            "path": path,
+            "status": status
+        }
+        requestUrl = "http://192.168.91.132:9000/api/cameras/camera-records/response"
+        response = requests.put(requestUrl, json=body, headers={'Authorization': authorization})
 
-    # Check the status code
-    if response.status_code == 200:
-        print("cap nhat record thanh cong")
-    else:
-        print("cap nhat record that bai")
+        # Check the status code
+        if response.status_code == 200:
+            print("cap nhat record thanh cong")
+        else:
+            print("cap nhat record that bai")
+    except:
+        print("loi cap nhat record")

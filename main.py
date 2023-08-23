@@ -1,7 +1,7 @@
 import json
 import zmq
 import threading
-
+from config import url_web
 from config import *
 from yml_process import *
 from video_process import capture, record
@@ -106,12 +106,14 @@ def listen_message(socket, messages_pool):
 # xu ly record
 def capture_process(id, station_camera_id, time):
     status, path = capture(station_camera_id, time)
-    update_capture(id,path,status)
+    link_cam = url_web + path
+    update_capture(id,link_cam,status)
 
 # xu ly capture
 def record_process(id, station_camera_id, time):
     status, path = record(station_camera_id, time)
-    update_record(id,path,status)
+    link_cam = url_web + path
+    update_record(id,link_cam,status)
 
 # convert message tu byte -> dict
 def convert_message(byte_message):

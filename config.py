@@ -6,3 +6,4 @@ mediamtx_path = "mediamtx/mediamtx.yml"
 thread_pool_size = 1
 record_time = 60
 segment_time = 60
+url_web = "http://192.168.91.150/"
