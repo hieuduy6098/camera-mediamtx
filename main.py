@@ -27,14 +27,14 @@ def main():
                 type_message = message['type']
                 id = message['data']["id"]
                 station_camera_id = message['data']["station_camera_id"]
-                time = message['data']["time"]
+                link_rtsp = message['data']["link_rtsp"]
                 if type_message == 3:
-                    capture = threading.Thread(target=capture_process, args=(id, station_camera_id,time,))
+                    capture = threading.Thread(target=capture_process, args=(id, station_camera_id,link_rtsp,))
                     capture.start()
                     capture.join()
                     print("capture xong")
                 if type_message == 4:
-                    record = threading.Thread(target=record_process, args=(id, station_camera_id,time,))
+                    record = threading.Thread(target=record_process, args=(id, station_camera_id,link_rtsp,))
                     record.start()
                     record.join()
                     print("record xong")
@@ -82,12 +82,12 @@ def listen_message(socket, messages_pool):
             elif type_message == 3:
                 # chup anh
                 messages_pool.append(data_message)
-                status = 1
+                status = 2
             
             elif type_message == 4:
                 # quay video
                 messages_pool.append(data_message)
-                status = 1
+                status = 2
 
             else:
                 print(f"type_message = {type_message} khong phu hop")
@@ -104,14 +104,14 @@ def listen_message(socket, messages_pool):
     socket.close()
 
 # xu ly record
-def capture_process(id, station_camera_id, time):
-    status, path = capture(station_camera_id, time)
+def capture_process(id, station_camera_id, link_rtsp):
+    status, path = capture(station_camera_id, link_rtsp)
     link_cam = url_web + path
     update_capture(id,link_cam,status)
 
 # xu ly capture
-def record_process(id, station_camera_id, time):
-    status, path = record(station_camera_id, time)
+def record_process(id, station_camera_id, link_rtsp):
+    status, path = record(station_camera_id, link_rtsp)
     link_cam = url_web + path
     update_record(id,link_cam,status)
 

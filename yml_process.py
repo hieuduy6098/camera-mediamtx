@@ -43,16 +43,8 @@ def add_camera(id, link_rtsp):
     # không lấy được dữ liệu -> status = 0
     if yml_data == None:
       return 0
-    
-    # kiểm tra id có tồn tại trong file không
-    cameras = yml_data["paths"]
 
-    if cameras == None:
-      cameras = {}
-    else:
-      if id in cameras:
-        print(f"camera id {id} đã tồn tại trong file yml")
-        return 2
+    cameras = yml_data["paths"]
     
     # tạo đường dẫn thư mục output cho video
     camera_output_path = source_path + f"{id}/"
@@ -64,8 +56,8 @@ def add_camera(id, link_rtsp):
     # thêm camera vào file yml
     camera_element = {
       "source": link_rtsp,
-      "runOnInit": f"ffmpeg -rtsp_transport tcp -i {link_rtsp} -c:v copy -f segment -segment_time {segment_time} -segment_format mp4 -strftime 1 -reset_timestamps 1 {source_path}{id}/%Y%m%d%H%M%S.mp4",
-      "runOnInitRestart": True,
+      # "runOnInit": f"ffmpeg -rtsp_transport tcp -i {link_rtsp} -c:v copy -f segment -segment_time {segment_time} -segment_format mp4 -strftime 1 -reset_timestamps 1 {source_path}{id}/%Y%m%d%H%M%S.mp4",
+      # "runOnInitRestart": True,
       "sourceProtocol": "tcp",
     }
     
@@ -99,8 +91,8 @@ def update_camera(id, link_rtsp):
     
     camera_element = {
       "source": link_rtsp,
-      "runOnInit": f"ffmpeg -rtsp_transport tcp -i {link_rtsp} -c:v copy -f segment -segment_time {segment_time} -segment_format mp4 -strftime 1 -reset_timestamps 1 {source_path}{id}/%Y%m%d%H%M%S.mp4",
-      "runOnInitRestart": True,
+      # "runOnInit": f"ffmpeg -rtsp_transport tcp -i {link_rtsp} -c:v copy -f segment -segment_time {segment_time} -segment_format mp4 -strftime 1 -reset_timestamps 1 {source_path}{id}/%Y%m%d%H%M%S.mp4",
+      # "runOnInitRestart": True,
       "sourceProtocol": "tcp",
     }
     cameras[f"{id}"] = camera_element

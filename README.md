@@ -28,6 +28,6 @@ example
     "data": {
         "id":"string"
         "station_camera_id":"string"
-        "time": "20230808110000" 
+        "linkrtsp": "string" 
     }
 }   
